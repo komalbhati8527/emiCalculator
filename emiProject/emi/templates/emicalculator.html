@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+</head>
+<body>
+
+
+         <div class="whiteBox" id="Mortgage">
+               <div class="headingBox"><h2>{{title}}</h2></div>
+               <div class="emiCalculator">
+                       <div class="row">
+                          <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12">
+                             <div class="priceRangeSlider">
+                                <div class="row">
+                                   <div class="col-xl-8 col-lg-8 col-md-8 col-sm-6">
+                                      <label>Loan Amount</label>
+                                   </div>
+                                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                      <div class="inputBox inputBox1">
+                                         <input name="loanAmount" id="loanAmount" class="effect" type="text" value="1000000" disabled/>
+                                      </div>
+                                   </div>
+                                </div>
+                                <div id="slider1">
+                                   <input type="range" min="0" max="10000000" step="10000" value="1000000" class="slider" id="loanAmountSlider">
+                                </div>
+                             </div>
+                             <div class="priceRangeSlider">
+                                <div class="row">
+                                   <div class="col-xl-8 col-lg-8 col-md-8 col-sm-6">
+                                      <label>Loan Tenure</label>
+                                   </div>
+                                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                      <div class="inputBox inputBox2">
+                                         <input name="loanTenure" id="loanTenure" class="effect" type="text" value="10" disabled />
+                                      </div>
+                                   </div>
+                                </div>
+                                <div id="slider2">
+                                   <input type="range" min="0" max="30" step="1" value="10" class="slider" id="loanTenureSlider">
+                                </div>
+                             </div>
+                             <div class="priceRangeSlider">
+                                <div class="row">
+                                   <div class="col-xl-8 col-lg-8 col-md-8 col-sm-6">
+                                      <label>Loan Interest Rate</label>
+                                   </div>
+                                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                      <div class="inputBox inputBox3">
+                                         <input name="loanInterest" id="loanInterest" class="effect" type="text" value="7.2" disabled/>
+                                      </div>
+                                   </div>
+                                </div>
+                                <div id="slider3">
+                                   <input type="range" step="0.1" min="0" max="30" value="7.2" class="slider" id="loanInterestSlider">
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+                       <button type="submit" class="calulateEmi">Calculate</button>
+                <div class="row">
+                  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12">
+                     <div class="loanDetails">
+                        <ul>
+                           <li class="active">
+                              <label>Monthly Payment</label>
+                              <strong id="monthlyEmi"></strong>
+                           </li>
+<!--                           <li>-->
+<!--                              <label>Total Amount payable</label>-->
+<!--                              <strong id="totalLoanAmount"></strong>-->
+<!--                           </li>-->
+                           <li>
+                              <label>Total Interest payable</label>
+                              <strong id="totalLoanInterest"></strong>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+
+               </div>
+            </div>
+            </div>
+</body>
+
+<script type='text/javascript'>
+    $(document).ready(function(e){
+       $("#loanAmountSlider").on('click change ', function(){
+             loanValue = $(this).val() + "";
+             $('#loanAmount').val(loanValue);
+        })
+        $("#loanTenureSlider").on('click change ', function(){
+             $("#loanTenure").val($(this).val());
+        })
+         $("#loanInterestSlider").on('click change ', function(){
+             $("#loanInterest").val($(this).val());
+        })
+          $('.calulateEmi').click(function(){
+              var loanAmount = $('#loanAmount').val()
+              var loanTenure = $('#loanTenure').val()
+              var loanInterest = $('#loanInterest').val()
+              var data = {"loanAmount":loanAmount, "loanTenure":loanTenure, "loanInterest":loanInterest}
+
+              $.ajax({
+                 url: "/emiResult",
+                 type: "POST",
+                 data: data,
+                 success: function (response) {
+                     console.log("response is:", response);
+                     var res = response.data
+                     $('#monthlyEmi').html(res.emi)
+                     $('#totalLoanInterest').html(res.interest)
+                 }
+              })
+          })
+    });
+</script>
+</html>
