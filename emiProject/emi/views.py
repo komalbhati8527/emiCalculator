@@ -10,9 +10,6 @@ def emicalculator(request):
 @csrf_exempt
 def emiResult(request):
     # formula P x R x (1+R)^N / [(1+R)^N-1]
-    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$44")
-    print("#################################")
-    print("ewew ", request.POST)
     loanAmount = request.POST.get("loanAmount")
     loanTenure = request.POST.get("loanTenure")
     loanInterest = request.POST.get("loanInterest")
@@ -22,7 +19,7 @@ def emiResult(request):
     power = pow(1+rate, tenure)/(pow(1+rate, tenure) - 1)
     emi = principal * rate * power
     total_interest = emi * tenure - principal
-    response = {"emi": int(emi), "interest": int(total_interest)}
-    print("response : ", response)
+    total_amount = principal + total_interest
+    response = {"emi": int(emi), "interest": int(total_interest), "total_amount": int(total_amount)}
     return JsonResponse({"data": response})
 
